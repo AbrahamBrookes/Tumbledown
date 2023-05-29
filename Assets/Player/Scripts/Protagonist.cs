@@ -34,7 +34,7 @@ public class Protagonist : MonoBehaviour
 	// our animator component
 	private Animator _animator;
 
-	[SerializeField] private GameObject mesh = default;
+	[SerializeField] private GameObject _mesh = default;
 
 	// cache some stuff on awake
 	private void Awake()
