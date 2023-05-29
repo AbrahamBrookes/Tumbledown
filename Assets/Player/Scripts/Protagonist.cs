@@ -18,6 +18,8 @@ public class Protagonist : MonoBehaviour
 
 	// movement speeds
 	[SerializeField] private float _runSpeed = 1.4f;
+	// allow getting runspeed
+	public float RunSpeed => _runSpeed;
 	[SerializeField] private float _acceleration = 5f;
 
 	public const float GRAVITY_MULTIPLIER = 50f;
@@ -51,6 +53,18 @@ public class Protagonist : MonoBehaviour
 	private void Update()
 	{
 		RecalculateMovement();
+	}
+
+	// allow other script to apply multipliers to movement speed
+	public void ApplySpeedMultiplier(float multiplier)
+	{
+		_runSpeed *= multiplier;
+	}
+
+	// remove a speed multiplier
+	public void RemoveSpeedMultiplier(float multiplier)
+	{
+		_runSpeed /= multiplier;
 	}
 
 	private void RecalculateMovement()
