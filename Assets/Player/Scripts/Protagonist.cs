@@ -59,20 +59,22 @@ public class Protagonist : MonoBehaviour
 
 		movementInput = new Vector3(_inputVector.x, 0f, _inputVector.y);
 
-		//Fix to avoid getting a Vector3.zero vector, which would result in the player turning to x:0, z:0
-		if (_inputVector.sqrMagnitude == 0f)
-			movementInput = transform.forward * (movementInput.magnitude + .01f);
-
-		// always rotate to face the input direction
-		mesh.transform.rotation = Quaternion.LookRotation(movementInput, Vector3.up);
-
-		//Accelerate/decelerate
+		// Accelerate/decelerate
 		targetSpeed = Mathf.Clamp01(_inputVector.magnitude);
 		if (targetSpeed > 0f)
 		{
 			targetSpeed = _runSpeed;
 		}
 		targetSpeed = Mathf.Lerp(_previousSpeed, targetSpeed, Time.deltaTime * _acceleration);
+		
+		// Rotate
+		if (targetSpeed > 0f)
+		{
+			if (_inputVector.sqrMagnitude > 0f) {
+				// rotate to face the input direction
+				_mesh.transform.rotation = Quaternion.LookRotation(movementInput, Vector3.up);
+			}
+		}
 
 		movementVector.x = movementInput.normalized.x * targetSpeed;
 		movementVector.z = movementInput.normalized.z * targetSpeed;
