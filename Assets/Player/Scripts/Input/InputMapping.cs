@@ -37,6 +37,7 @@ abstract public class InputMapping : GameInput.IGameplayActions
 	public virtual void OnInteract(InputAction.CallbackContext context) { }
 	public virtual void OnPause(InputAction.CallbackContext context) { }
 	public virtual void OnOpenInventory(InputAction.CallbackContext context) { }
+	public virtual void OnCrouch(InputAction.CallbackContext context) { }
 
 	// on construct, accept and cache our deps
 	public InputMapping(Protagonist protagonist, CharacterController characterController)
