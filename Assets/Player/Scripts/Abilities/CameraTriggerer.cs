@@ -47,6 +47,18 @@ public class CameraTriggerer : MonoBehaviour
 	// when we enter a trigger, crunch the enum and route the call
 	private void OnTriggerEnter(Collider other)
 	{
+		// see if the other collider has a tag
+		if (other.tag == null)
+		{
+			return;
+		}
+		
+		// see if the other collider's tag is in our enum
+		if (!System.Enum.IsDefined(typeof(CameraTriggerType), other.tag))
+		{
+			return;
+		}
+
 		// get the trigger type from the tag
 		CameraTriggerType triggerType = (CameraTriggerType)System.Enum.Parse(typeof(CameraTriggerType), other.tag);
 
