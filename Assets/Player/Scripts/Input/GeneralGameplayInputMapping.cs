@@ -19,25 +19,11 @@ public class GeneralGameplayInputMapping : InputMapping
 	Interactor _interactor;
 
 	// in the contructor pass the protagonist and the character controller directly to base
-	public GeneralGameplayInputMapping(Protagonist protagonist, CharacterController characterController) : base(protagonist, characterController) {
+	public GeneralGameplayInputMapping(PlayerMovement movement, CharacterController characterController) : base(movement, characterController) {
 		// on construct, cache deps
-		_attacker = _protagonist.GetComponent<Attacker>();
-		_crouchAndCrawl = _protagonist.GetComponent<CrouchAndCrawl>();
-		_interactor = _protagonist.GetComponent<Interactor>();
-	}
-
-	// these functions map directly to an action in the Input System
-	public override void OnMove(InputAction.CallbackContext context) {
-		// only if performed
-		if (context.performed) {
-			// pass the input vector to the protagonist and let them move aboot
-			_protagonist.UpdateInput(context.ReadValue<Vector2>());
-		}
-
-		// if the button has been released, stop moving
-		if (context.canceled) {
-			_protagonist.UpdateInput(Vector2.zero);
-		}
+		_attacker = movement.GetComponent<Attacker>();
+		_crouchAndCrawl = movement.GetComponent<CrouchAndCrawl>();
+		_interactor = movement.GetComponent<Interactor>();
 	}
 
 	public override void OnAttack(InputAction.CallbackContext context) {

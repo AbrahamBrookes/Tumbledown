@@ -13,9 +13,9 @@ public class CurrentlyAttackingInputMapping : InputMapping
 	Attacker _attacker;
 
 	// in the contructor pass the protagonist and the character controller directly to base
-	public CurrentlyAttackingInputMapping(Protagonist protagonist, CharacterController characterController) : base(protagonist, characterController) {
+	public CurrentlyAttackingInputMapping(PlayerMovement movement, CharacterController characterController) : base(movement, characterController) {
 		// on construct, cache the attacker script
-		_attacker = _protagonist.GetComponent<Attacker>();
+		_attacker = movement.GetComponent<Attacker>();
 	}
 
 	// don't allow movement while attacking

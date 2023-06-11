@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 public class CantDoAnythingInputMapping : InputMapping
 {
 	// in the contructor pass the protagonist and the character controller directly to base
-	public CantDoAnythingInputMapping(Protagonist protagonist, CharacterController characterController) : base(protagonist, characterController) { }
+	public CantDoAnythingInputMapping(PlayerMovement movement, CharacterController characterController) : base(movement, characterController) { }
 
 	// these functions map directly to an action in the Input System
 	public override void OnMove(InputAction.CallbackContext context) { }

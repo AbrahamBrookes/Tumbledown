@@ -25,14 +25,21 @@ abstract public class InputMapping : GameInput.IGameplayActions
 	// our game input
 	protected GameInput _gameInput;
 
-	// our reference to the protagonist script
-	protected Protagonist _protagonist;
+	// the current movement vector being input
+	protected Vector2 _movementVector;
+
+	// allow getting the movement vector
+	public Vector2 MovementVector { get { return _movementVector; } }
 
 	// we're always going to need a character controller
 	protected CharacterController _characterController;
 
-	// these functions map directly to an action in the Input System
-	public virtual void OnMove(InputAction.CallbackContext context) { }
+	// whenever we get input, update the movement vector
+	public virtual void OnMove(InputAction.CallbackContext context) {
+		// update our input vector
+		_movementVector = context.ReadValue<Vector2>();
+	}
+
 	public virtual void OnAttack(InputAction.CallbackContext context) { }
 	public virtual void OnInteract(InputAction.CallbackContext context) { }
 	public virtual void OnPause(InputAction.CallbackContext context) { }
@@ -40,9 +47,8 @@ abstract public class InputMapping : GameInput.IGameplayActions
 	public virtual void OnCrouch(InputAction.CallbackContext context) { }
 
 	// on construct, accept and cache our deps
-	public InputMapping(Protagonist protagonist, CharacterController characterController)
+	public InputMapping(PlayerMovement movement, CharacterController characterController)
 	{
-		_protagonist = protagonist;
 		_characterController = characterController;
 	}
 
@@ -69,5 +75,4 @@ abstract public class InputMapping : GameInput.IGameplayActions
 		_gameInput.Gameplay.Disable();
 		_gameInput.Gameplay.SetCallbacks(null);
 	}
-
 }

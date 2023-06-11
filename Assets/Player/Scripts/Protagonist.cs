@@ -34,25 +34,15 @@ public class Protagonist : MonoBehaviour
 	// our animator component
 	private Animator _animator;
 
-	[SerializeField] private GameObject _mesh = default;
-
 	// cache some stuff on awake
 	private void Awake()
 	{
 		_characterController = GetComponent<CharacterController>();
-		_animator = GetComponent<Animator>();
-		_inputMapping = new GeneralGameplayInputMapping(this, _characterController);
-		_inputMapping.ActivateMapping();
 	}
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
 		lastHit = hit;
-	}
-
-	private void Update()
-	{
-		RecalculateMovement();
 	}
 
 	// allow other script to apply multipliers to movement speed
@@ -67,61 +57,9 @@ public class Protagonist : MonoBehaviour
 		_runSpeed /= multiplier;
 	}
 
-	private void RecalculateMovement()
-	{
-		float targetSpeed;
-
-		movementInput = new Vector3(_inputVector.x, 0f, _inputVector.y);
-
-		// Accelerate/decelerate
-		targetSpeed = Mathf.Clamp01(_inputVector.magnitude);
-		if (targetSpeed > 0f)
-		{
-			targetSpeed = _runSpeed;
-		}
-		targetSpeed = Mathf.Lerp(_previousSpeed, targetSpeed, Time.deltaTime * _acceleration);
-		
-		// Rotate
-		if (targetSpeed > 0f)
-		{
-			if (_inputVector.sqrMagnitude > 0f) {
-				// rotate to face the input direction
-				_mesh.transform.rotation = Quaternion.LookRotation(movementInput, Vector3.up);
-			}
-		}
-
-		movementVector.x = movementInput.normalized.x * targetSpeed;
-		movementVector.z = movementInput.normalized.z * targetSpeed;
-		// fall to the ground
-		movementVector.y = Mathf.Max(movementVector.y + Physics.gravity.y * GRAVITY_MULTIPLIER * Time.deltaTime, MAX_FALL_SPEED);
-
-		_characterController.Move(movementVector * Time.deltaTime);
-
-		// set the walking speed to the current velocity
-		_animator.SetFloat("MovingSpeed", Mathf.Clamp01(_characterController.velocity.magnitude));
-
-		_previousSpeed = targetSpeed;
-
-		// UpdateCamera();
-	}
-
-	
-
-	//---- EVENT LISTENERS ----
-
-	public void UpdateInput(Vector2 movement)
-	{
-		_inputVector = movement;
-	}
-
-	// allow other scripts to set the inputMapping
+	// proxy SetInputMapping to out PlayerMovement component
 	public void SetInputMapping(Type inputMapping)
 	{
-		// disable the old input mapping if we have one
-		if (_inputMapping != null)
-			_inputMapping.DeactivateMapping();
-
-		_inputMapping = (InputMapping)Activator.CreateInstance(inputMapping, this, _characterController);
-		_inputMapping.ActivateMapping();
+		GetComponent<PlayerMovement>().SetInputMapping(inputMapping);
 	}
 }
