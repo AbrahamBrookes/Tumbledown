@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Rigidbody _rb;
     private CharacterController _characterController;
 
 	[SerializeField] private GameObject _mesh = default;
@@ -25,13 +24,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-		// if no rigidbody, create one
-		_rb = GetComponent<Rigidbody>();
-		if (_rb == null)
-		{
-			_rb = gameObject.AddComponent<Rigidbody>();
-		}
-
 		// if no character controller, create one
 		_characterController = GetComponent<CharacterController>();
 		if (_characterController == null)
@@ -45,8 +37,6 @@ public class PlayerMovement : MonoBehaviour
 		{
 			Debug.LogWarning("No animator found on game object using PlayerMovement");
 		}
-
-        _rb.isKinematic = true; // Disable Rigidbody's physics simulation
     }
 
 	private void Awake() {
@@ -74,18 +64,8 @@ public class PlayerMovement : MonoBehaviour
         // Apply gravity
         _moveDirection.y += gravity;
 
-        // Apply movement to Rigidbody
-        _rb.velocity = _moveDirection;
-
         // Apply movement to CharacterController
         _characterController.Move(_moveDirection * moveSpeed * Time.deltaTime);
-
-        // Perform a jump using Rigidbody's AddForce if the character is jumping
-        if (_isJumping)
-        {
-            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            _isJumping = false;
-        }
     }
 	
 	// allow other scripts to set the inputMapping
