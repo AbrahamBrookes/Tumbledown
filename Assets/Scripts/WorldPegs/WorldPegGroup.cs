@@ -36,7 +36,7 @@ public class WorldPegGroup : MonoBehaviour
 		}
 
 		// set collision
-		SetCollisionCubeSize();
+		SetCollisionCubeSize(_size.x, _size.y, _size.z);
 	}
 
 	// spawn a world peg
@@ -45,8 +45,12 @@ public class WorldPegGroup : MonoBehaviour
 		// get a random world peg prefab
 		GameObject worldPegPrefab = _worldPegPrefabs[Random.Range(0, _worldPegPrefabs.Count)];
 
+		// position will be relative to the transform
+		Vector3 position = transform.position;
+		position += new Vector3(x, y, z);
+
 		// instantiate the world peg prefab
-		GameObject worldPeg = Instantiate(worldPegPrefab, new Vector3(x, y, z), Quaternion.identity);
+		GameObject worldPeg = Instantiate(worldPegPrefab, position, Quaternion.identity);
 		// rotate 90 x
 		worldPeg.transform.Rotate(-90, 0, 0);
 
@@ -72,7 +76,7 @@ public class WorldPegGroup : MonoBehaviour
 	}
 
 	// set the size of the collision cube
-	public void SetCollisionCubeSize()
+	public void SetCollisionCubeSize(float x, float y, float z)
 	{
 		// if no box collider is set, create one
 		_collisionCube = GetComponent<BoxCollider>();
@@ -85,7 +89,7 @@ public class WorldPegGroup : MonoBehaviour
 		_collisionCube.size = _size;
 
 		// offset the collision cube to fit the world peg group
-		_collisionCube.center = new Vector3(((_size.x / 2) - 1) - 0.2f, (_size.y / 2) - 0.2f, ((_size.z / 2) - 1) - 0.2f);
+		_collisionCube.center = new Vector3((x / 2) - 0.5f, y / 2, (z / 2) - 0.5f);
 	}
 }
 
