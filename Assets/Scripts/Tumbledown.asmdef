@@ -1,6 +1,6 @@
 {
     "name": "Tumbledown",
-    "rootNamespace": "",
+    "rootNamespace": "Tumbledown",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
