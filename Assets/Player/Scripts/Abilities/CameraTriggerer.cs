@@ -33,12 +33,6 @@ public class CameraTriggerer : MonoBehaviour
 		{
 			_virtualCamera = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
 		}
-		
-		// if we still don't have one, log an error
-		if (_virtualCamera == null)
-		{
-			Debug.LogError("No virtual camera found in scene - please add one and assign it to the CameraTriggerer script on the Protagonist.");
-		}
 
 		ResetCamera();
         
@@ -85,6 +79,12 @@ public class CameraTriggerer : MonoBehaviour
 	// this method will be called when we enter a PeekCameraTrigger
 	private void PeekCameraTrigger(Collider other)
 	{
+		// if we don't have a virtual camera, don't do anything
+		if (_virtualCamera == null)
+		{
+			return;
+		}
+
 		// lerp the virtual camera's 3rd person follow Camera Distance setting to -1 using dotween
 		DOTween.To(() => _virtualCamera.GetCinemachineComponent<Cinemachine.Cinemachine3rdPersonFollow>().CameraDistance, x => _virtualCamera.GetCinemachineComponent<Cinemachine.Cinemachine3rdPersonFollow>().CameraDistance = x, -1, 1f);
 		
@@ -99,6 +99,12 @@ public class CameraTriggerer : MonoBehaviour
 	// this method will be called when we exit any trigger
 	private void ResetCamera()
 	{
+		// if we don't have a virtual camera, don't do anything
+		if (_virtualCamera == null)
+		{
+			return;
+		}
+
 		// reset the virtual camera's 3rd person follow Camera Distance setting to its original value
 		DOTween.To(() => _virtualCamera.GetCinemachineComponent<Cinemachine.Cinemachine3rdPersonFollow>().CameraDistance, x => _virtualCamera.GetCinemachineComponent<Cinemachine.Cinemachine3rdPersonFollow>().CameraDistance = x, _originalCameraDistance, 1f);
 	}
