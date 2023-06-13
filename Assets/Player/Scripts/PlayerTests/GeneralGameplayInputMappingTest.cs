@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.SceneManagement;
 
 /**
@@ -54,7 +54,7 @@ namespace Tumbledown.PlayerTests
 			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
 
 			// the protagonists mesh should be facing right
-			Assert.AreEqual(270.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+			Assert.AreEqual(90.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
 
 			// release the input
 			Set(gamepad.leftStick, new Vector2(0, 0));
@@ -81,7 +81,7 @@ namespace Tumbledown.PlayerTests
 			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
 
 			// the protagonists mesh should be facing down
-			Assert.AreEqual(180.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+			Assert.AreEqual(0.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
 
 			// release the input
 			Set(gamepad.leftStick, new Vector2(0, 0));
@@ -108,7 +108,7 @@ namespace Tumbledown.PlayerTests
 			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
 
 			// the protagonists mesh should be facing left
-			Assert.AreEqual(90.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+			Assert.AreEqual(270.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
 
 			// release the input
 			Set(gamepad.leftStick, new Vector2(0, 0));
@@ -135,7 +135,7 @@ namespace Tumbledown.PlayerTests
 			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
 
 			// the protagonists mesh should be facing up
-			Assert.AreEqual(0.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+			Assert.AreEqual(180.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
 
 			// release the input
 			Set(gamepad.leftStick, new Vector2(0, 0));
@@ -178,7 +178,7 @@ namespace Tumbledown.PlayerTests
 			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
 
 			// the protagonists mesh should be facing right
-			Assert.AreEqual(225.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+			Assert.AreEqual(45.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
 
 			// release the input
 			Set(gamepad.leftStick, new Vector2(0, 0));
@@ -205,7 +205,7 @@ namespace Tumbledown.PlayerTests
 			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
 
 			// the protagonists mesh should be facing left
-			Assert.AreEqual(135.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+			Assert.AreEqual(315.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
 
 			// release the input
 			Set(gamepad.leftStick, new Vector2(0, 0));
@@ -232,7 +232,7 @@ namespace Tumbledown.PlayerTests
 			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
 
 			// the protagonists mesh should be facing left
-			Assert.AreEqual(45.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+			Assert.AreEqual(225.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
 
 			// release the input
 			Set(gamepad.leftStick, new Vector2(0, 0));
@@ -259,7 +259,7 @@ namespace Tumbledown.PlayerTests
 			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
 
 			// the protagonists mesh should be facing left
-			Assert.AreEqual(315.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+			Assert.AreEqual(135.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
 
 			// release the input
 			Set(gamepad.leftStick, new Vector2(0, 0));

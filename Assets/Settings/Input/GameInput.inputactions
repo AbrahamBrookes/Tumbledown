@@ -328,7 +328,7 @@
                 {
                     "name": "",
                     "id": "b5f11622-29d0-47c3-8832-201bd80b4f6f",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
@@ -339,7 +339,7 @@
                 {
                     "name": "",
                     "id": "92478935-8600-40b0-a6ea-ff6b29c7dba8",
-                    "path": "<Gamepad>/leftStickPress",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

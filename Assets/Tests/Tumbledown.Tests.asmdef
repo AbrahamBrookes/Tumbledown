@@ -1,0 +1,21 @@
+{
+    "name": "Tumbledown.Tests",
+    "rootNamespace": "Tumbledown.Tests",
+    "references": [
+        "GUID:93c0c69c7536ea54e86e84d8030d2eb8",
+        "GUID:9e5ee2c7f4d7bbe4199faa3cc9aea291",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

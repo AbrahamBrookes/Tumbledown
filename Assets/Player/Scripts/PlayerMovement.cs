@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = _inputMapping.MovementVector.x;
         float verticalInput = _inputMapping.MovementVector.y;
 
-        _moveDirection = -transform.forward * verticalInput + -transform.right * horizontalInput;
+        _moveDirection = transform.forward * verticalInput + transform.right * horizontalInput;
 		
 		// Rotate
 		if (_moveDirection.sqrMagnitude > 0f)
