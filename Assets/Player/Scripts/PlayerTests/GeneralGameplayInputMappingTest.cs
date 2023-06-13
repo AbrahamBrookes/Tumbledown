@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.SceneManagement;
 
 /**
  * Our GeneralGameplayInputMapping controls the game when the player is walking around and hitting
@@ -21,13 +22,18 @@ namespace Tumbledown.PlayerTests
 {
 	public class GeneralGameplayInputMappingTest : InputTestFixture
 	{
+		[SetUp]
+		public void SetUp(){
+			SceneManager.LoadScene("Scenes/Testing/MovementTestScene");
+		}
+
 		/**
 		* This test ensures that the OnMove function is working as expected:
 		* - when the player presses the move button, the protagonist moves
 		* - when the player releases the move button, the protagonist stops moving
 		*/
 		[UnityTest]
-		public IEnumerator OnMoveTest()
+		public IEnumerator PlayerCanMoveCompassDirections()
 		{
 			// create an input system
 			var gamepad = InputSystem.AddDevice<Gamepad>();
@@ -35,14 +41,240 @@ namespace Tumbledown.PlayerTests
 			// instantiate our protagonist prefab in Assets/Player/prefabs/Kora
 			var protagonist = Object.Instantiate(Resources.Load<GameObject>("Player/Kora"));
 
+			// cache the protagonists world location
+			Vector3 protagonistWorldLocation = protagonist.transform.position;
+
 			// do some input
-			Set(gamepad.leftStick, new Vector2(0.123f, 0.234f));
+			Set(gamepad.leftStick, new Vector2(1f, 0f));
 
-			// wait for 1 second
-			yield return new WaitForSeconds(1);
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist is moving
-			Assert.IsTrue(protagonist.GetComponent<Rigidbody2D>().velocity.x != 0 || protagonist.GetComponent<Rigidbody2D>().velocity.y != 0);
+			// check that the protagonist has moved
+			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// the protagonists mesh should be facing right
+			Assert.AreEqual(270.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+
+			// release the input
+			Set(gamepad.leftStick, new Vector2(0, 0));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// cache the protagonists world location
+			protagonistWorldLocation = protagonist.transform.position;
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has not moved
+			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// do some input
+			Set(gamepad.leftStick, new Vector2(0f, 1f));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has moved
+			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// the protagonists mesh should be facing down
+			Assert.AreEqual(180.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+
+			// release the input
+			Set(gamepad.leftStick, new Vector2(0, 0));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// cache the protagonists world location
+			protagonistWorldLocation = protagonist.transform.position;
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has not moved
+			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// do some input
+			Set(gamepad.leftStick, new Vector2(-1f, 0f));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has moved
+			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// the protagonists mesh should be facing left
+			Assert.AreEqual(90.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+
+			// release the input
+			Set(gamepad.leftStick, new Vector2(0, 0));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// cache the protagonists world location
+			protagonistWorldLocation = protagonist.transform.position;
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has not moved
+			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// do some input
+			Set(gamepad.leftStick, new Vector2(0f, -1f));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has moved
+			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// the protagonists mesh should be facing up
+			Assert.AreEqual(0.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+
+			// release the input
+			Set(gamepad.leftStick, new Vector2(0, 0));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// cache the protagonists world location
+			protagonistWorldLocation = protagonist.transform.position;
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has not moved
+			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+		}
+
+		/**
+		 * The player can move in diagonals and the mesh rotates to face diagonally
+		 */
+		[UnityTest]
+		public IEnumerator PlayerCanMoveDiagonally()
+		{
+			// create an input system
+			var gamepad = InputSystem.AddDevice<Gamepad>();
+
+			// instantiate our protagonist prefab in Assets/Player/prefabs/Kora
+			var protagonist = Object.Instantiate(Resources.Load<GameObject>("Player/Kora"));
+
+			// cache the protagonists world location
+			Vector3 protagonistWorldLocation = protagonist.transform.position;
+
+			// do some input
+			Set(gamepad.leftStick, new Vector2(1f, 1f));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has moved
+			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// the protagonists mesh should be facing right
+			Assert.AreEqual(225.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+
+			// release the input
+			Set(gamepad.leftStick, new Vector2(0, 0));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// cache the protagonists world location
+			protagonistWorldLocation = protagonist.transform.position;
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has not moved
+			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// do some input
+			Set(gamepad.leftStick, new Vector2(-1f, 1f));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has moved
+			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// the protagonists mesh should be facing left
+			Assert.AreEqual(135.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+
+			// release the input
+			Set(gamepad.leftStick, new Vector2(0, 0));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// cache the protagonists world location
+			protagonistWorldLocation = protagonist.transform.position;
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has not moved
+			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// do some input
+			Set(gamepad.leftStick, new Vector2(-1f, -1f));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has moved
+			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// the protagonists mesh should be facing left
+			Assert.AreEqual(45.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+
+			// release the input
+			Set(gamepad.leftStick, new Vector2(0, 0));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// cache the protagonists world location
+			protagonistWorldLocation = protagonist.transform.position;
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has not moved
+			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// do some input
+			Set(gamepad.leftStick, new Vector2(1f, -1f));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has moved
+			Assert.AreNotEqual(protagonistWorldLocation, protagonist.transform.position);
+
+			// the protagonists mesh should be facing left
+			Assert.AreEqual(315.0f, protagonist.GetComponentInChildren<SkinnedMeshRenderer>().transform.rotation.eulerAngles.y);
+
+			// release the input
+			Set(gamepad.leftStick, new Vector2(0, 0));
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// cache the protagonists world location
+			protagonistWorldLocation = protagonist.transform.position;
+
+			// wait for a tick
+			yield return new WaitForSeconds(0.1f);
+
+			// check that the protagonist has not moved
+			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
 		}
 	}
 }
