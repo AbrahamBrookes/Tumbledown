@@ -16,6 +16,6 @@ namespace Tumbledown.Collectables
 		// in order to track the state of each feather, each feather has a unique ID.
 		// We then save a list of all feathers, indexed by the ID, and the state of each
 		// feather is saved in the list.
-		public Dictionary<string, HiddenFeatherSaveData> hiddenFeathers;
+		public Dictionary<string, HiddenFeatherSaveData> hiddenFeathers = new Dictionary<string, HiddenFeatherSaveData>();
 	}
 }

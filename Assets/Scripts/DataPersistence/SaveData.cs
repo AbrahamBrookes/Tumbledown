@@ -10,5 +10,5 @@ namespace Tumbledown.DataPersistence
 	 * should extend SaveData (for the sake of type safety). You can add whatever fields you want
 	 * to persist, in your extending class.
 	 */
-    abstract public class SaveData {}
+    abstract public class SaveData { }
 }

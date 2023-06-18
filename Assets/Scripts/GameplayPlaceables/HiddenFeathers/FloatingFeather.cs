@@ -11,18 +11,35 @@ namespace Tumbledown.Collectables
     public class FloatingFeather : MonoBehaviour
     {
 		// We must have a HiddenFeather attached as well
-		public HiddenFeather hiddenFeather;
-		
+		private HiddenFeather _hiddenFeather;
+
         // Start is called before the first frame update
         void Start()
         {
-        
+			// make sure we have a HiddenFeather
+			_hiddenFeather = GetComponent<HiddenFeather>();
+
+			if (_hiddenFeather == null)
+			{
+				Debug.LogError("FloatingFeather does not have a HiddenFeather attached!");
+
+				// disable this component
+				enabled = false;
+
+				return;
+			}
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+		// When the player runs into this feather, we want to collect it
+		private void OnTriggerEnter(Collider other) {
+			// make sure we collided with the player
+			if (other.gameObject.tag != "Player")
+			{
+				return;
+			}
+
+			// collect the feather
+			_hiddenFeather.Collect();
+		}
     }
 }

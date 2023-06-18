@@ -12,33 +12,21 @@ namespace Tumbledown.Collectables
 	 */
     public class HiddenFeather : MonoBehaviour
     {
-		// a HiddenFeather will save when it is picked up, so we must always have a Saveable
-		private Saveable _saveable;
+		// a HiddenFeather will save when it is picked up, so we must always have a SaveFile
+		private SaveFile _savefile = new SaveFile("HiddenFeathers");
 
 		// and this is the save state of this feather
-		private HiddenFeatherSaveData _saveData;
+		private HiddenFeatherSaveData _saveData = new HiddenFeatherSaveData();
 
 		// the ID of this feather. This is unique to each feather in the game. Manually set
 		// this when you place the feather in the scene.
-		public string featherID;
+		public string FeatherID;
 
         // Start is called before the first frame update
         void Start()
         {
-			// make sure we have a Saveable
-			_saveable = GetComponent<Saveable>();
-			if (_saveable == null)
-			{
-				Debug.LogError("HiddenFeather does not have a Saveable component attached!");
-
-				// disable this component
-				enabled = false;
-
-				return;
-			}
-
 			// make sure we have a feather ID
-			if (featherID == null || featherID == "")
+			if (FeatherID == null || FeatherID == "")
 			{
 				Debug.LogError("HiddenFeather does not have a feather ID set!");
 
@@ -47,7 +35,10 @@ namespace Tumbledown.Collectables
 
 				return;
 			}
+		}
 
+		// on Awake, load up
+		private void Awake() {
 			// load the state of the feather
 			Load();
         }
@@ -57,6 +48,7 @@ namespace Tumbledown.Collectables
 		public void Collect()
 		{
 			// show a UI popup
+			Debug.Log("You collected a feather!");
 
 			// save the state of the feather
 			_saveData.isCollected = true;
@@ -68,35 +60,53 @@ namespace Tumbledown.Collectables
 		// Save the state of the feather to the save file
 		public void Save()
 		{
-			// call the save method on our Saveable
-			HiddenFeathersSaveData library = _saveable.Load<HiddenFeathersSaveData>();
+			// call the save method on our SaveFile
+			HiddenFeathersSaveData library = _savefile.Load<HiddenFeathersSaveData>();
+
+			// if we didn't get a library, create one (maybe the game hasn't been saved yet)
+			if (library == null)
+			{
+				library = new HiddenFeathersSaveData();
+			}
 
 			// update the save data for this feather
-			library.hiddenFeathers[featherID] = _saveData;
+			library.hiddenFeathers[FeatherID] = _saveData;
 
+// log the save data
+Debug.Log("HiddenFeather.Save() - " + FeatherID + " isCollected: " + _saveData.isCollected);
 			// save the library back to the save file
-			_saveable.Save(library);
+			_savefile.Save(library);
 		}
 
 		// Load the state of the feather from the save file
 		public void Load()
 		{
-			// call the load method on our Saveable
-			HiddenFeathersSaveData library = _saveable.Load<HiddenFeathersSaveData>();
+			// call the load method on our SaveFile
+			HiddenFeathersSaveData library = _savefile.Load<HiddenFeathersSaveData>();
+
+			// check we have a library
+			if (library == null)
+			{
+				Debug.LogError("HiddenFeather could not load the HiddenFeathersSaveData!");
+				return;
+			}
 
 			// find the feather in the save data
-			if (library.hiddenFeathers.ContainsKey(featherID))
-			{
-				// get the state of the feather
-				_saveData = library.hiddenFeathers[featherID];
-			}
-			else
+			if (! library.hiddenFeathers.ContainsKey(FeatherID))
 			{
 				// feather is not in the save data, this is a worry
-				Debug.LogError("HiddenFeather " + featherID + " is not in the save data!");
+				Debug.LogError("HiddenFeather " + FeatherID + " is not in the save data!");
+				return;
+			}
 
-				// disable this component
-				enabled = false;
+			// get the state of the feather
+			_saveData = library.hiddenFeathers[FeatherID];
+
+			// if isCollected is true, then the player has already collected this feather
+			// move this gameobject up 5 units so it is out of the way
+			if (_saveData.isCollected)
+			{
+				transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z);
 			}
 		}
     }

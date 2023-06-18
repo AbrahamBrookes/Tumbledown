@@ -14,21 +14,34 @@ namespace Tumbledown.DataPersistence {
 		private bool _useEncryption = false;
 		private string _encryptionKey = "abracadabra"; // change this to a compile time var at some point
 
-		public FileDataHandler(string dataFileName, bool encrypt = true)
+		public void Init(string dataFileName, bool encrypt = false)
 		{
 			_dataFileName = dataFileName;
 			_dataFilePath = Path.Combine(Application.persistentDataPath, (_dataFileName + ".json") );
 			_useEncryption = encrypt;
 		}
 
+		// check we have initialized, or throw an error
+		private void CheckInit()
+		{
+			if (string.IsNullOrEmpty(_dataFileName))
+			{
+				throw new Exception("FileDataHandler: Init() has not been called.");
+			}
+		}
+
 		public T Load<T>()
 		{
+			CheckInit();
+			
 			T loadedData = default(T);
 
 			if ( ! File.Exists(_dataFilePath))
 			{
 				Debug.Log("No data file found at " + _dataFilePath);
-				return default(T);
+				
+				// die early
+				return default(T); // default(T) is null for reference types
 			}
 
 			try {
@@ -62,6 +75,8 @@ namespace Tumbledown.DataPersistence {
 
 		public void Save(SaveData data)
 		{
+			CheckInit();
+			
 			try
 			{
 				// create dir if not exists
@@ -105,10 +120,20 @@ namespace Tumbledown.DataPersistence {
 		// delete the data file
 		public void DeleteSaveFile()
 		{
+			CheckInit();
+			
 			if (File.Exists(_dataFilePath))
 			{
 				File.Delete(_dataFilePath);
 			}
+		}
+
+		// check if the file exists
+		public bool SaveFileExists()
+		{
+			CheckInit();
+			
+			return File.Exists(_dataFilePath);
 		}
 	}
 }
