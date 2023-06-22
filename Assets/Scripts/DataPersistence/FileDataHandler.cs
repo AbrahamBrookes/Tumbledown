@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Tumbledown.DataPersistence {
 
@@ -63,7 +64,7 @@ namespace Tumbledown.DataPersistence {
 				}
 
 				// deserialize json
-				loadedData = JsonUtility.FromJson<T>(dataToLoad);
+				loadedData = JsonConvert.DeserializeObject<T>(dataToLoad);
 			}
 			catch (Exception e)
 			{
@@ -83,7 +84,7 @@ namespace Tumbledown.DataPersistence {
 				Directory.CreateDirectory(Path.GetDirectoryName(_dataFilePath));
 
 				// serialize to json
-				string json = JsonUtility.ToJson(data, true);
+				string json = JsonConvert.SerializeObject(data);
 
 				// encrypt if requested
 				if (_useEncryption)
