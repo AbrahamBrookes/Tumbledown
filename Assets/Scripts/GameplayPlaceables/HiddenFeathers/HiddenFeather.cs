@@ -71,9 +71,7 @@ namespace Tumbledown.Collectables
 
 			// update the save data for this feather
 			library.hiddenFeathers[FeatherID] = _saveData;
-
-// log the save data
-Debug.Log("HiddenFeather.Save() - " + FeatherID + " isCollected: " + _saveData.isCollected);
+			
 			// save the library back to the save file
 			_savefile.Save(library);
 		}
