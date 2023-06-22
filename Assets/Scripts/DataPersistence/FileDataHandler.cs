@@ -74,7 +74,7 @@ namespace Tumbledown.DataPersistence {
 			return loadedData;
 		}
 
-		public void Save(SaveData data)
+		public void Save<T>(T data)
 		{
 			CheckInit();
 			

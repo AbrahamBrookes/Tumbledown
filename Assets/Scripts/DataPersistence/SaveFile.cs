@@ -30,7 +30,7 @@ namespace Tumbledown.DataPersistence
 		}
 
 		// save the data using our FileDataHandler class
-		public void Save(SaveData data)
+		public void Save<T>(T data)
 		{
 			// check the incoming data is workable
 			if (data == null)
@@ -43,11 +43,11 @@ namespace Tumbledown.DataPersistence
 			_dataHandler.Init(_saveFileName);
 
 			// save the data
-			_dataHandler.Save(data);
+			_dataHandler.Save<T>(data);
 		}
 
 		// load the data using our FileDataHandler class
-		public T Load<T>() where T : SaveData
+		public T Load<T>()
 		{
 			// init the data handler
 			_dataHandler.Init(_saveFileName);
@@ -55,8 +55,8 @@ namespace Tumbledown.DataPersistence
 			// check that save file exists
 			if (!_dataHandler.SaveFileExists())
 			{
-				Debug.LogError("SaveFile: Save file does not exist.");
-				return null;
+				// create a new one
+				_dataHandler.Save<T>(default(T));
 			}
 
 			// load the data
