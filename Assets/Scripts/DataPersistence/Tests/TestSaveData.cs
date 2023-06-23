@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tumbledown.DataPersistence;
 
 namespace Tumbledown.DataPersistence.Tests
 {
-    public class TestSaveData : SaveData
+    public class TestSaveData
     {
 		public int testInt;
 		public string testString;
