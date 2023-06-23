@@ -24,7 +24,7 @@ namespace Tumbledown.WorldPegsTests
 			var worldPegGroup = gameObject.AddComponent<Tumbledown.WorldPegGroup>();
 
 			// set the size of the world peg group to 3,3,3
-			worldPegGroup.Size = new Vector3(3, 3, 3);
+			worldPegGroup.Size = new Vector3Int(3, 3, 3);
 
 			// spawn the world pegs
 			worldPegGroup.SpawnWorldPegs();

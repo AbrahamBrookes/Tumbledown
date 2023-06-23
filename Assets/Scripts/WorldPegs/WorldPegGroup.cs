@@ -5,19 +5,24 @@ using UnityEngine;
 
 namespace Tumbledown
 {
+	/**
+	 * WorldPegGroup is a group of world pegs. It is responsible for spawning the world pegs
+	 * and setting their collision cube. In order to render individual pegs, we'll use a
+	 * 3d dictionary of WorldPegFactories which we can adjust individually, serialise etc
+	 */
 	public class WorldPegGroup : MonoBehaviour
 	{
-		// the worldpegs we have spawned
-		[SerializeField] private List<GameObject> _worldPegs = default;
-
 		// the world peg prefabs we will spawn
-		[SerializeField] private List<GameObject> _worldPegPrefabs = default;
+		[SerializeField] private List<GameObject> _worldPegPrefabs = new List<GameObject>();
 
 		// a vec3 defining the size of the world peg group
-		[SerializeField] private Vector3 _size = default;
+		[SerializeField] private Vector3Int _size = new Vector3Int(2,2,2);
+
+		// a dictionary indexed by vec3 containing the world peg factories we'll be using
+		private Dictionary<Vector3Int, WorldPegFactory> _worldPegFactories = new Dictionary<Vector3Int, WorldPegFactory>();
 
 		// allow setting _size
-		public Vector3 Size
+		public Vector3Int Size
 		{
 			get { return _size; }
 			set { _size = value; }
@@ -54,34 +59,44 @@ namespace Tumbledown
 			// get a random world peg prefab
 			GameObject worldPegPrefab = _worldPegPrefabs[Random.Range(0, _worldPegPrefabs.Count)];
 
-			// position will be relative to the transform
-			Vector3 position = transform.position;
-			position += new Vector3(x, y, z);
+			// get the factory at x y z
+			WorldPegFactory factory = GetFactory(x, y, z);
 
-			// instantiate the world peg prefab
-			GameObject worldPeg = Instantiate(worldPegPrefab, position, Quaternion.identity);
-			// rotate 90 x
-			worldPeg.transform.Rotate(-90, 0, 0);
-
-			// set the world peg's parent to this transform
-			worldPeg.transform.SetParent(transform);
-
-			// add the world peg to the list of world pegs
-			_worldPegs.Add(worldPeg);
+			// pump the factory
+			factory.Render();
 		}
 
-		// clear all pegs
-		public void ClearWorldPegs()
+		// clear a world peg
+		public void ClearWorldPeg(int x, int y, int z)
 		{
-			// loop through the world pegs
-			for (int i = 0; i < _worldPegs.Count; i++)
+			// get the factory at x y z
+			WorldPegFactory factory = GetFactory(x, y, z);
+
+			// clear the factory
+			factory.Clear();
+		}
+
+		// get a factory at x y z
+		public WorldPegFactory GetFactory(int x, int y, int z)
+		{
+			// create a vec3 from x y z
+			Vector3Int offset = new Vector3Int(x, y, z);
+
+			// if the dictionary doesn't contain the key
+			if (!_worldPegFactories.ContainsKey(offset))
 			{
-				// destroy the world peg
-				DestroyImmediate(_worldPegs[i]);
+				// create a new factory
+				_worldPegFactories.Add(offset, new WorldPegFactory(this, _worldPegPrefabs[Random.Range(0, _worldPegPrefabs.Count)], offset));
 			}
 
-			// clear the list of world pegs
-			_worldPegs.Clear();
+			// return the factory
+			return _worldPegFactories[offset];
+		}
+
+		// overload for get factory
+		public WorldPegFactory GetFactory(Vector3Int offset)
+		{
+			return GetFactory(offset.x, offset.y, offset.z);
 		}
 
 		// set the size of the collision cube
@@ -124,9 +139,6 @@ namespace Tumbledown
 			// if the button is pressed
 			if (GUI.Button(new Rect(10, 10, 100, 30), "Re-render pegs"))
 			{
-				// clear the world pegs
-				_worldPegGroup.ClearWorldPegs();
-
 				// spawn the world pegs
 				_worldPegGroup.SpawnWorldPegs();
 			}
