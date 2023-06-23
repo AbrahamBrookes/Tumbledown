@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tumbledown.DataPersistence;
 
 namespace Tumbledown.Collectables
 {
@@ -11,7 +10,7 @@ namespace Tumbledown.Collectables
 	 * etc. This class is responsible for saving the state of all the hidden feathers to the
 	 * same save file.
 	 */
-    public class HiddenFeathersSaveData : SaveData
+    public class HiddenFeathersSaveData
     {
 		// in order to track the state of each feather, each feather has a unique ID.
 		// We then save a list of all feathers, indexed by the ID, and the state of each
