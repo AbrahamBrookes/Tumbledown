@@ -12,8 +12,8 @@ namespace Tumbledown
 	 */
 	public class WorldPegGroup : MonoBehaviour
 	{
-		// the world peg prefabs we will spawn
-		[SerializeField] private List<GameObject> _worldPegPrefabs = new List<GameObject>();
+		// the world peg group theme we'll use to select meshes
+		[SerializeField] private WorldPegGroupTheme _worldPegGroupTheme;
 
 		// a vec3 defining the size of the world peg group
 		[SerializeField] private Vector3Int _size = new Vector3Int(2,2,2);
@@ -56,14 +56,126 @@ namespace Tumbledown
 		// spawn a world peg
 		public void SpawnWorldPeg(int x, int y, int z)
 		{
-			// get a random world peg prefab
-			GameObject worldPegPrefab = _worldPegPrefabs[Random.Range(0, _worldPegPrefabs.Count)];
+			// figure out which list to render
+			List<Mesh> meshType = GetMesh(x, y, z);
 
+			// get a random mesh from the list
+			Mesh selectedMesh = meshType[Random.Range(0, meshType.Count)];
+
+			
+		}
+		
+		// figure out which mesh to render
+		public List<Mesh> GetMesh(int x, int y, int z)
+		{
 			// get the factory at x y z
 			WorldPegFactory factory = GetFactory(x, y, z);
 
-			// pump the factory
-			factory.Render();
+			// get the theme
+			WorldPegGroupTheme theme = _worldPegGroupTheme;
+
+			// flags for selecting the face type - ledge, wall, top, top corner, wall corner
+			bool isLeft = false;
+			bool isRight = false;
+			bool isFront = false;
+			bool isBack = false;
+			bool isTop = false;
+
+			// if the x offset is 0, we're on the left
+			if (x == 0)
+			{
+				isLeft = true;
+			}
+
+			// if the x offset is the size of the world peg group, we're on the right
+			if (x == _size.x - 1)
+			{
+				isRight = true;
+			}
+
+			// if the y offset is 0, we're on the front
+			if (y == 0)
+			{
+				isFront = true;
+			}
+
+			// if the y offset is the size of the world peg group, we're on the back
+			if (y == _size.y - 1)
+			{
+				isBack = true;
+			}
+
+			// if the z offset is 0, we're on the top
+			if (z == 0)
+			{
+				isTop = true;
+			}
+
+			// our best bet at which tile to return
+			List<Mesh> bestBet = new List<Mesh>();
+
+			// best bet at cascading rules
+			if (isTop)
+			{
+				bestBet = theme.topMeshes;
+
+				if (isLeft)
+				{
+					bestBet = theme.ledgeMeshes;
+
+					if (isFront)
+					{
+						bestBet = theme.topCornerMeshes;
+					}
+					if (isBack)
+					{
+						bestBet = theme.topCornerMeshes;
+					}
+				}
+				if (isRight)
+				{
+					bestBet = theme.ledgeMeshes;
+
+					if (isFront)
+					{
+						bestBet = theme.topCornerMeshes;
+					}
+					if (isBack)
+					{
+						bestBet = theme.topCornerMeshes;
+					}
+				}
+			}
+			else
+			{
+				bestBet = theme.wallMeshes;
+
+				if (isLeft)
+				{
+					if (isFront)
+					{
+						bestBet = theme.wallCornerMeshes;
+					}
+					if (isBack)
+					{
+						bestBet = theme.wallCornerMeshes;
+					}
+				}
+				if (isRight)
+				{
+					if (isFront)
+					{
+						bestBet = theme.wallCornerMeshes;
+					}
+					if (isBack)
+					{
+						bestBet = theme.wallCornerMeshes;
+					}
+				}
+			}
+
+			// return the best bet
+			return bestBet;
 		}
 
 		// clear a world peg
