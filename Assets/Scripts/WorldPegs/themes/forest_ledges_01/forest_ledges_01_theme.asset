@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ee78076f1187d47bad84588dcb4c4e, type: 3}
   m_Name: forest_ledges_01_theme
   m_EditorClassIdentifier: 
-  ledgeCornerMeshes:
+  topCornerMeshes:
   - {fileID: -4584186691447386381, guid: 42bbec3b41ebbcf479a85b12d993e1b2, type: 3}
   wallCornerMeshes:
   - {fileID: 8831141831122377871, guid: 9e4a00f030d02c74c8858c8b6d7ecbe1, type: 3}
@@ -22,5 +22,5 @@ MonoBehaviour:
   - {fileID: -5411497696184524529, guid: 80b8988e85c31334498d9727283f71b3, type: 3}
   topMeshes:
   - {fileID: 4579454407841743219, guid: 6e87801ab2b49104680e0cb9e4424238, type: 3}
-  material: {fileID: -6126091556477775235, guid: e795b7d2f0cceea4d9ef1c16c478d0b6,
+  Material: {fileID: -9117483709511198939, guid: 6e87801ab2b49104680e0cb9e4424238,
     type: 3}

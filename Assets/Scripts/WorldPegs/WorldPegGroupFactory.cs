@@ -61,7 +61,7 @@ namespace Tumbledown
 						// if we're at a corner on the top, use a top corner mesh
 						else if (y == _size.y - 1 && (x == 0 || x == _size.x - 1 || z == 0 || z == _size.z - 1))
 						{
-							mesh = _worldPegGroupTheme.ledgeCornerMeshes[Random.Range(0, _worldPegGroupTheme.ledgeCornerMeshes.Count)];
+							mesh = _worldPegGroupTheme.topCornerMeshes[Random.Range(0, _worldPegGroupTheme.topCornerMeshes.Count)];
 						}
 
 						// if we're at a corner not on the top, use a wall corner mesh

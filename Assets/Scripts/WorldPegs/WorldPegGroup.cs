@@ -18,9 +18,6 @@ namespace Tumbledown
 		// a vec3 defining the size of the world peg group
 		[SerializeField] private Vector3Int _size = new Vector3Int(2,2,2);
 
-		// a dictionary indexed by vec3 containing the world peg factories we'll be using
-		private Dictionary<Vector3Int, WorldPegFactory> _worldPegFactories = new Dictionary<Vector3Int, WorldPegFactory>();
-
 		// allow setting _size
 		public Vector3Int Size
 		{
@@ -34,6 +31,12 @@ namespace Tumbledown
 		// spawn the world pegs
 		public void SpawnWorldPegs()
 		{
+			// delete all child gameobjects
+			foreach (Transform child in transform)
+			{
+				DestroyImmediate(child.gameObject);
+			}
+
 			// loop through the x axis
 			for (int x = 0; x < _size.x; x++)
 			{
@@ -56,24 +59,65 @@ namespace Tumbledown
 		// spawn a world peg
 		public void SpawnWorldPeg(int x, int y, int z)
 		{
-			// figure out which list to render
-			List<Mesh> meshType = GetMesh(x, y, z);
+			// get the WorldPegLocation
+			WorldPegLocation worldPegLocation = GetWorldPegLocation(x, y, z);
+
+			// only if one of the flags is true, otherwise we are looking at an internal peg
+			// create a blank location to compare against
+			if( worldPegLocation.Equals(new WorldPegLocation()) )
+			{
+				return;
+			}
+
+			// figure out which mesh list to render from
+			List<Mesh> meshType = GetMesh(worldPegLocation);
 
 			// get a random mesh from the list
 			Mesh selectedMesh = meshType[Random.Range(0, meshType.Count)];
 
-			
+			// create a new gameobject
+			GameObject newGameObject = new GameObject();
+
+			// set this as parent
+			newGameObject.transform.parent = transform;
+
+			// offset it
+			newGameObject.transform.localPosition = new Vector3(x, y, z);
+
+			// scale by 100
+			newGameObject.transform.localScale = new Vector3(100, 100, 100);
+
+			// translate -100 on local x
+			newGameObject.transform.Translate(-1, 0, 0, Space.Self);
+
+			// get the rotation from the world peg location
+			Quaternion rotation = GetDesiredRotation(worldPegLocation);
+
+			// set the rotation
+			newGameObject.transform.localRotation = rotation;
+
+			// give it a mesh filter
+			MeshFilter meshFilter = newGameObject.AddComponent<MeshFilter>();
+
+			// give it a mesh renderer
+			MeshRenderer meshRenderer = newGameObject.AddComponent<MeshRenderer>();
+
+			// set the mesh
+			meshFilter.mesh = selectedMesh;
+
+			// set the material
+			meshRenderer.material = _worldPegGroupTheme.Material;
+
+			// add a WorldPeg component for editing in the inspector
+			WorldPeg worldPeg = newGameObject.AddComponent<WorldPeg>();
+
+			// init the worldpeg
+			worldPeg.Init(this, newGameObject, new Vector3Int(x, y, z), worldPegLocation);
 		}
-		
-		// figure out which mesh to render
-		public List<Mesh> GetMesh(int x, int y, int z)
+
+		// given an xyz, return the WorldPegLocation
+		public WorldPegLocation GetWorldPegLocation(int x, int y, int z)
 		{
-			// get the factory at x y z
-			WorldPegFactory factory = GetFactory(x, y, z);
-
-			// get the theme
-			WorldPegGroupTheme theme = _worldPegGroupTheme;
-
 			// flags for selecting the face type - ledge, wall, top, top corner, wall corner
 			bool isLeft = false;
 			bool isRight = false;
@@ -93,81 +137,74 @@ namespace Tumbledown
 				isRight = true;
 			}
 
-			// if the y offset is 0, we're on the front
-			if (y == 0)
+			// if the z offset is 0, we're on the front
+			if (z == 0)
 			{
 				isFront = true;
 			}
 
-			// if the y offset is the size of the world peg group, we're on the back
-			if (y == _size.y - 1)
+			// if the z offset is the size of the world peg group, we're on the back
+			if (z == _size.z - 1)
 			{
 				isBack = true;
 			}
 
-			// if the z offset is 0, we're on the top
-			if (z == 0)
+			// if the y offset is 1 less than the size of the world peg group, we're on the top
+			if (y == _size.y - 1)
 			{
 				isTop = true;
 			}
+
+			// create a new WorldPegLocation
+			WorldPegLocation worldPegLocation = new WorldPegLocation();
+
+			// set the flags
+			worldPegLocation.isLeft = isLeft;
+			worldPegLocation.isRight = isRight;
+			worldPegLocation.isFront = isFront;
+			worldPegLocation.isBack = isBack;
+			worldPegLocation.isTop = isTop;
+
+			// return the WorldPegLocation
+			return worldPegLocation;
+		}
+		
+		// figure out which mesh to render
+		public List<Mesh> GetMesh(WorldPegLocation location)
+		{
+			// get the theme
+			WorldPegGroupTheme theme = _worldPegGroupTheme;
 
 			// our best bet at which tile to return
 			List<Mesh> bestBet = new List<Mesh>();
 
 			// best bet at cascading rules
-			if (isTop)
+			if (location.isTop)
 			{
 				bestBet = theme.topMeshes;
 
-				if (isLeft)
+				if (location.isLeft || location.isRight)
 				{
 					bestBet = theme.ledgeMeshes;
 
-					if (isFront)
-					{
-						bestBet = theme.topCornerMeshes;
-					}
-					if (isBack)
+					if (location.isFront || location.isBack)
 					{
 						bestBet = theme.topCornerMeshes;
 					}
 				}
-				if (isRight)
+
+				if (location.isFront || location.isBack)
 				{
 					bestBet = theme.ledgeMeshes;
-
-					if (isFront)
-					{
-						bestBet = theme.topCornerMeshes;
-					}
-					if (isBack)
-					{
-						bestBet = theme.topCornerMeshes;
-					}
 				}
 			}
 			else
 			{
 				bestBet = theme.wallMeshes;
 
-				if (isLeft)
+				if (location.isLeft || location.isRight)
 				{
-					if (isFront)
-					{
-						bestBet = theme.wallCornerMeshes;
-					}
-					if (isBack)
-					{
-						bestBet = theme.wallCornerMeshes;
-					}
-				}
-				if (isRight)
-				{
-					if (isFront)
-					{
-						bestBet = theme.wallCornerMeshes;
-					}
-					if (isBack)
+					if (location.isFront || location.isBack)
 					{
 						bestBet = theme.wallCornerMeshes;
 					}
@@ -177,39 +214,124 @@ namespace Tumbledown
 			// return the best bet
 			return bestBet;
 		}
-
-		// clear a world peg
-		public void ClearWorldPeg(int x, int y, int z)
+		
+		// figure out the rotation for the given location
+		public Quaternion GetDesiredRotation(WorldPegLocation location)
 		{
-			// get the factory at x y z
-			WorldPegFactory factory = GetFactory(x, y, z);
+			// our best bet at which tile to return
+			Quaternion bestBet = Quaternion.identity;
 
-			// clear the factory
-			factory.Clear();
-		}
-
-		// get a factory at x y z
-		public WorldPegFactory GetFactory(int x, int y, int z)
-		{
-			// create a vec3 from x y z
-			Vector3Int offset = new Vector3Int(x, y, z);
-
-			// if the dictionary doesn't contain the key
-			if (!_worldPegFactories.ContainsKey(offset))
+			// best bet at cascading rules
+			if (location.isTop)
 			{
-				// create a new factory
-				_worldPegFactories.Add(offset, new WorldPegFactory(this, _worldPegPrefabs[Random.Range(0, _worldPegPrefabs.Count)], offset));
+				if (location.isLeft)
+				{
+					// rotate 90
+					bestBet = Quaternion.Euler(0, 90, 0);
+
+					if (location.isFront)
+					{
+						// rotate 0 degrees
+						bestBet = Quaternion.Euler(0, 0, 0);
+					}
+					if (location.isBack)
+					{
+						// rotate 180 degrees
+						bestBet = Quaternion.Euler(0, 90, 0);
+					}
+				}
+				if (location.isRight)
+				{
+					// rotate 270
+					bestBet = Quaternion.Euler(0, 270, 0);
+
+					if (location.isFront)
+					{
+						// rotate 270 degrees
+						bestBet = Quaternion.Euler(0, 270, 0);
+					}
+					if (location.isBack)
+					{
+						// rotate 180 degrees
+						bestBet = Quaternion.Euler(0, 180, 0);
+					}
+				}
+
+				if (!location.isLeft && !location.isRight)
+				{
+					if (location.isFront)
+					{
+						// rotate 0
+						bestBet = Quaternion.identity;
+					}
+
+					if (location.isBack)
+					{
+						// rotate 180
+						bestBet = Quaternion.Euler(0, 180, 0);
+					}
+				}
+			}
+			else
+			{
+				if (location.isLeft)
+				{
+					// rotate 90
+					bestBet = Quaternion.Euler(0, 90, 0);
+
+					if (location.isFront)
+					{
+						// rotate 0 degrees
+						bestBet = Quaternion.Euler(0, 0, 0);
+					}
+					if (location.isBack)
+					{
+						// rotate 180 degrees
+						bestBet = Quaternion.Euler(0, 90, 0);
+					}
+				}
+				if (location.isRight)
+				{
+					// rotate 270
+					bestBet = Quaternion.Euler(0, 270, 0);
+
+					if (location.isFront)
+					{
+						// rotate 270 degrees
+						bestBet = Quaternion.Euler(0, 270, 0);
+					}
+					if (location.isBack)
+					{
+						// rotate 180 degrees
+						bestBet = Quaternion.Euler(0, 180, 0);
+					}
+				}
+
+				if (!location.isLeft && !location.isRight)
+				{
+					if (location.isFront)
+					{
+						// no rotation needed
+						bestBet = Quaternion.identity;
+					}
+
+					if (location.isBack)
+					{
+						// rotate 180
+						bestBet = Quaternion.Euler(0, 180, 0);
+					}
+				}
 			}
 
-			// return the factory
-			return _worldPegFactories[offset];
+			// return the best bet
+			return bestBet;
 		}
 
-		// overload for get factory
-		public WorldPegFactory GetFactory(Vector3Int offset)
-		{
-			return GetFactory(offset.x, offset.y, offset.z);
-		}
+		// depending on the location we may need to additionally offset some of the meshes
+		// public Vector3 GetDesiredMeshOffset(WorldPegLocation location)
+		// {
+			
+		// }
 
 		// set the size of the collision cube
 		public void SetCollisionCubeSize(float x, float y, float z)

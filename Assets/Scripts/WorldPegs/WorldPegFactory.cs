@@ -75,7 +75,7 @@ namespace Tumbledown
 			WorldPeg worldPeg = _spawnedPrefab.AddComponent<WorldPeg>();
 
 			// init the worldpeg
-			worldPeg.Init(_worldPegGroup, _prefabToSpawn, _offset);
+			// worldPeg.Init(_worldPegGroup, _prefabToSpawn, _offset);
 		}
 
 		// clear for re-rendering

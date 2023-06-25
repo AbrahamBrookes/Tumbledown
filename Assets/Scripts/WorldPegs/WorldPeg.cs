@@ -34,8 +34,11 @@ namespace Tumbledown
 		// allow peeking at the offset
 		public Vector3Int Offset { get { return _offset; } }
 
+		// our worldPegLocation
+		[SerializeField] private WorldPegLocation _worldPegLocation;
+
 		// Init for passing in a world peg group and a prefab to spawn
-		public void Init(WorldPegGroup worldPegGroup, GameObject prefabToSpawn, Vector3Int offset)
+		public void Init(WorldPegGroup worldPegGroup, GameObject prefabToSpawn, Vector3Int offset, WorldPegLocation worldPegLocation)
 		{
 			// set the world peg group
 			_worldPegGroup = worldPegGroup;
@@ -45,6 +48,9 @@ namespace Tumbledown
 
 			// set the offset
 			_offset = offset;
+
+			// set the world peg location
+			_worldPegLocation = worldPegLocation;
 		}
 
 		// a function to render the world peg
@@ -65,7 +71,7 @@ namespace Tumbledown
 		public void Clear()
 		{
 			// this worldpeg shouldn't do any actual clearing, ask the group to clear a factory
-			_worldPegGroup.ClearWorldPeg(_offset.x, _offset.y, _offset.z);
+			// _worldPegGroup.ClearWorldPeg(_offset.x, _offset.y, _offset.z);
 		}	
     }
 
@@ -112,14 +118,14 @@ namespace Tumbledown
 			// whenever the prefab of the world peg changes
 			if (_prefabToSpawn != _worldPeg.PrefabToSpawn)
 			{
-				// get the factory from the group
-				WorldPegFactory factory = _worldPeg.WorldPegGroup.GetFactory(_worldPeg.Offset);
+				// // get the factory from the group
+				// WorldPegFactory factory = _worldPeg.WorldPegGroup.GetFactory(_worldPeg.Offset);
 
-				// set the prefab to spawn
-				factory.PrefabToSpawn = _worldPeg.PrefabToSpawn;
+				// // set the prefab to spawn
+				// factory.PrefabToSpawn = _worldPeg.PrefabToSpawn;
 
-				// pump the factory
-				factory.Render();
+				// // pump the factory
+				// factory.Render();
 			}
 		}
 	}
