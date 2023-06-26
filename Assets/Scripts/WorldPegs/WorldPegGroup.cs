@@ -344,5 +344,53 @@ namespace Tumbledown
 				_worldPegGroup.ClearWorldPegs();
 			}
 		}
+
+		// spawn one transform widget for each side of the group, like on the faces of dice
+		private void OnSceneGUI()
+		{
+			Quaternion rotation = Quaternion.identity;
+			Vector3 scale = _worldPegGroup.transform.localScale;
+			Vector3 position = _worldPegGroup.transform.position;
+
+			// draw a transform handle
+			Handles.TransformHandle(ref position, ref rotation, ref scale);
+
+			Vector3 oldPosition = _worldPegGroup.transform.position;
+
+			// if the handle has changed
+			if (GUI.changed)
+			{
+				Vector3Int newSize = _worldPegGroup.Size;
+
+				// if the position has changed on the Y axis
+				if (oldPosition.y != position.y)
+				{
+					// set the new size
+					newSize.y = (int)position.y;
+				}
+
+				// if the position has changed on the X axis
+				if (oldPosition.x != position.x)
+				{
+					// set the new size
+					newSize.x = (int)position.x;
+				}
+
+				// if the position has changed on the Z axis
+				if (oldPosition.z != position.z)
+				{
+					// set the new size
+					newSize.z = (int)position.z;
+				}
+
+				// re render
+				_worldPegGroup.Size = newSize;
+				_worldPegGroup.ClearWorldPegs();
+				_worldPegGroup.SpawnWorldPegs();
+
+				// set the position to the old position
+				position = oldPosition;
+			}
+		}
 	}
 }
