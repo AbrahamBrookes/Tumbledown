@@ -13,14 +13,13 @@ MonoBehaviour:
   m_Name: forest_ledges_01_theme
   m_EditorClassIdentifier: 
   topCornerMeshes:
-  - {fileID: -4584186691447386381, guid: 42bbec3b41ebbcf479a85b12d993e1b2, type: 3}
+  - {fileID: 4300000, guid: 0fc81c49783cf8e41b8ac3319aaf7f3b, type: 2}
   wallCornerMeshes:
-  - {fileID: 8831141831122377871, guid: 9e4a00f030d02c74c8858c8b6d7ecbe1, type: 3}
+  - {fileID: 4300000, guid: d95beea1af9a99b40ad7be8dfde51fd9, type: 2}
   ledgeMeshes:
-  - {fileID: -3441635862283786925, guid: e795b7d2f0cceea4d9ef1c16c478d0b6, type: 3}
+  - {fileID: 4300000, guid: 106446e15db7a9d47843fda6516a6d26, type: 2}
   wallMeshes:
-  - {fileID: -5411497696184524529, guid: 80b8988e85c31334498d9727283f71b3, type: 3}
+  - {fileID: 4300000, guid: 43ca8b216797a304896431c9fdb74045, type: 2}
   topMeshes:
-  - {fileID: 4579454407841743219, guid: 6e87801ab2b49104680e0cb9e4424238, type: 3}
-  Material: {fileID: -9117483709511198939, guid: 6e87801ab2b49104680e0cb9e4424238,
-    type: 3}
+  - {fileID: 4300000, guid: 487e0384d73a5554d867ed799d390a39, type: 2}
+  Material: {fileID: 2100000, guid: 922d146ef9e1849448b463f5ed8765a5, type: 2}

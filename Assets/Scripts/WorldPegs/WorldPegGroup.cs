@@ -18,6 +18,9 @@ namespace Tumbledown
 		// a vec3 defining the size of the world peg group
 		[SerializeField] private Vector3Int _size = new Vector3Int(2,2,2);
 
+		// a dictionary of vec3int locations with gameobject worldpegs
+		[SerializeField] private Dictionary<Vector3Int, GameObject> _worldPegs = new Dictionary<Vector3Int, GameObject>();
+
 		// allow setting _size
 		public Vector3Int Size
 		{
@@ -31,12 +34,6 @@ namespace Tumbledown
 		// spawn the world pegs
 		public void SpawnWorldPegs()
 		{
-			// delete all child gameobjects
-			foreach (Transform child in transform)
-			{
-				DestroyImmediate(child.gameObject);
-			}
-
 			// loop through the x axis
 			for (int x = 0; x < _size.x; x++)
 			{
@@ -59,6 +56,12 @@ namespace Tumbledown
 		// spawn a world peg
 		public void SpawnWorldPeg(int x, int y, int z)
 		{
+			// if this peg already exists, return
+			if (_worldPegs.ContainsKey(new Vector3Int(x, y, z)))
+			{
+				return;
+			}
+
 			// get the WorldPegLocation
 			WorldPegLocation worldPegLocation = GetWorldPegLocation(x, y, z);
 
@@ -87,9 +90,6 @@ namespace Tumbledown
 			// scale by 100
 			newGameObject.transform.localScale = new Vector3(100, 100, 100);
 
-			// translate -100 on local x
-			newGameObject.transform.Translate(-1, 0, 0, Space.Self);
-
 			// get the rotation from the world peg location
 			Quaternion rotation = GetDesiredRotation(worldPegLocation);
 
@@ -113,6 +113,23 @@ namespace Tumbledown
 
 			// init the worldpeg
 			worldPeg.Init(this, newGameObject, new Vector3Int(x, y, z), worldPegLocation);
+
+			// save it to the dictionary
+			_worldPegs.Add(new Vector3Int(x, y, z), newGameObject);
+		}
+
+		// clear all world pegs by deleting the gameobject and clearing the dictionary
+		public void ClearWorldPegs()
+		{
+			// loop through all pegs
+			foreach (KeyValuePair<Vector3Int, GameObject> worldPeg in _worldPegs)
+			{
+				// destroy the gameobject
+				DestroyImmediate(worldPeg.Value);
+			}
+
+			// clear the dictionary
+			_worldPegs.Clear();
 		}
 
 		// given an xyz, return the WorldPegLocation
@@ -192,10 +209,12 @@ namespace Tumbledown
 						bestBet = theme.topCornerMeshes;
 					}
 				}
-
-				if (location.isFront || location.isBack)
+				else 
 				{
-					bestBet = theme.ledgeMeshes;
+					if (location.isFront || location.isBack)
+					{
+						bestBet = theme.ledgeMeshes;
+					}
 				}
 			}
 			else
@@ -222,116 +241,57 @@ namespace Tumbledown
 			Quaternion bestBet = Quaternion.identity;
 
 			// best bet at cascading rules
-			if (location.isTop)
+			if (location.isLeft)
 			{
-				if (location.isLeft)
-				{
-					// rotate 90
-					bestBet = Quaternion.Euler(0, 90, 0);
+				// rotate 270
+				bestBet = Quaternion.Euler(0, 270, 0);
 
-					if (location.isFront)
-					{
-						// rotate 0 degrees
-						bestBet = Quaternion.Euler(0, 0, 0);
-					}
-					if (location.isBack)
-					{
-						// rotate 180 degrees
-						bestBet = Quaternion.Euler(0, 90, 0);
-					}
-				}
-				if (location.isRight)
+				if (location.isFront)
 				{
-					// rotate 270
+					// rotate 270 degrees
 					bestBet = Quaternion.Euler(0, 270, 0);
-
-					if (location.isFront)
-					{
-						// rotate 270 degrees
-						bestBet = Quaternion.Euler(0, 270, 0);
-					}
-					if (location.isBack)
-					{
-						// rotate 180 degrees
-						bestBet = Quaternion.Euler(0, 180, 0);
-					}
 				}
-
-				if (!location.isLeft && !location.isRight)
+				if (location.isBack)
 				{
-					if (location.isFront)
-					{
-						// rotate 0
-						bestBet = Quaternion.identity;
-					}
-
-					if (location.isBack)
-					{
-						// rotate 180
-						bestBet = Quaternion.Euler(0, 180, 0);
-					}
+					// rotate 0 degrees
+					bestBet = Quaternion.Euler(0, 0, 0);
 				}
 			}
-			else
+			if (location.isRight)
 			{
-				if (location.isLeft)
+				// rotate 90
+				bestBet = Quaternion.Euler(0, 90, 0);
+
+				if (location.isFront)
 				{
-					// rotate 90
+					// rotate 180 degrees
+					bestBet = Quaternion.Euler(0, 180, 0);
+				}
+				if (location.isBack)
+				{
+					// rotate 90 degrees
 					bestBet = Quaternion.Euler(0, 90, 0);
-
-					if (location.isFront)
-					{
-						// rotate 0 degrees
-						bestBet = Quaternion.Euler(0, 0, 0);
-					}
-					if (location.isBack)
-					{
-						// rotate 180 degrees
-						bestBet = Quaternion.Euler(0, 90, 0);
-					}
 				}
-				if (location.isRight)
-				{
-					// rotate 270
-					bestBet = Quaternion.Euler(0, 270, 0);
+			}
 
-					if (location.isFront)
-					{
-						// rotate 270 degrees
-						bestBet = Quaternion.Euler(0, 270, 0);
-					}
-					if (location.isBack)
-					{
-						// rotate 180 degrees
-						bestBet = Quaternion.Euler(0, 180, 0);
-					}
+			if (!location.isLeft && !location.isRight)
+			{
+				if (location.isFront)
+				{
+					// rotate 180
+					bestBet = Quaternion.Euler(0, 180, 0);
 				}
 
-				if (!location.isLeft && !location.isRight)
+				if (location.isBack)
 				{
-					if (location.isFront)
-					{
-						// no rotation needed
-						bestBet = Quaternion.identity;
-					}
-
-					if (location.isBack)
-					{
-						// rotate 180
-						bestBet = Quaternion.Euler(0, 180, 0);
-					}
+					// rotate 0
+					bestBet = Quaternion.Euler(0, 0, 0);
 				}
 			}
 
 			// return the best bet
 			return bestBet;
 		}
-
-		// depending on the location we may need to additionally offset some of the meshes
-		// public Vector3 GetDesiredMeshOffset(WorldPegLocation location)
-		// {
-			
-		// }
 
 		// set the size of the collision cube
 		public void SetCollisionCubeSize(float x, float y, float z)
@@ -375,6 +335,13 @@ namespace Tumbledown
 			{
 				// spawn the world pegs
 				_worldPegGroup.SpawnWorldPegs();
+			}
+
+			// if the button is pressed
+			if (GUI.Button(new Rect(10, 50, 100, 30), "Clear pegs"))
+			{
+				// clear the world pegs
+				_worldPegGroup.ClearWorldPegs();
 			}
 		}
 	}
