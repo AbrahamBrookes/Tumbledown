@@ -13,7 +13,7 @@ namespace Tumbledown.Abilities {
 
 	public class Attacker : MonoBehaviour
 	{
-		// the attack collider is the same as the interaction cube
+		// the attack collider
 		[SerializeField] private GameObject _attackCollider;
 
 		// we need a reference to the animator so we can make animation calls
@@ -28,8 +28,8 @@ namespace Tumbledown.Abilities {
 		// on start, cache deps
 		private void Start()
 		{
-			_animator = GetComponent<Animator>();
-			_protagonist = GetComponent<Protagonist>();
+			_animator = GetComponentInParent<Animator>();
+			_protagonist = GetComponentInParent<Protagonist>();
 
 			// if we don't have an attack collider already set, log an error
 			if (_attackCollider == null)
@@ -45,10 +45,24 @@ namespace Tumbledown.Abilities {
 		private void OnTriggerEnter(Collider other)
 		{
 			// if the other gameobject has a component that implements the iSlashable interface
-			if (other.GetComponent(typeof(iSlashable)) != null)
+			if (other.GetComponent<iSlashable>() != null)
 			{
 				// add it to the list of slashable objects
-				_slashableObjects.Add((iSlashable)other.GetComponent(typeof(iSlashable)));
+				_slashableObjects.Add(other.GetComponent<iSlashable>());
+			}
+		}
+
+		/**
+		* Whenever a gameobject with a component that implements the iSlashable interface
+		* leaves the attack collider, we remove it from the list of slashable objects.
+		*/
+		private void OnTriggerExit(Collider other)
+		{
+			// if the other gameobject exists in our list of slashable objects
+			if (_slashableObjects.Contains(other.GetComponent<iSlashable>()))
+			{
+				// remove it from the list
+				_slashableObjects.Remove(other.GetComponent<iSlashable>());
 			}
 		}
 

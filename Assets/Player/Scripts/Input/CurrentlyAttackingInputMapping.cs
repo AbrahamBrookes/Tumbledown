@@ -17,7 +17,7 @@ namespace Tumbledown.Input {
 		// in the contructor pass the protagonist and the character controller directly to base
 		public CurrentlyAttackingInputMapping(PlayerMovement movement, CharacterController characterController) : base(movement, characterController) {
 			// on construct, cache the attacker script
-			_attacker = movement.GetComponent<Attacker>();
+			_attacker = movement.GetComponentInChildren<Attacker>();
 		}
 
 		// don't allow movement while attacking

@@ -23,7 +23,7 @@ namespace Tumbledown.Input {
 		// in the contructor pass the protagonist and the character controller directly to base
 		public GeneralGameplayInputMapping(PlayerMovement movement, CharacterController characterController) : base(movement, characterController) {
 			// on construct, cache deps
-			_attacker = movement.GetComponent<Attacker>();
+			_attacker = movement.GetComponentInChildren<Attacker>();
 			_crouchAndCrawl = movement.GetComponent<CrouchAndCrawl>();
 			_interactor = movement.GetComponent<Interactor>();
 		}

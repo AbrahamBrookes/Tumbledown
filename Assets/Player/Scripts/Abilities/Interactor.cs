@@ -31,7 +31,7 @@ public class Interactor : MonoBehaviour
 	{
 		// see if the other object has a component that implements the Interactable interface
 		Interactable interactable = other.GetComponent<Interactable>();
-		Debug.Log("Interactable: " + interactable);
+		// Debug.Log("Interactable: " + interactable);
 
 		if (interactable != null)
 		{
@@ -101,7 +101,7 @@ public class Interactor : MonoBehaviour
 		{
 			interactables += interactable.gameObject.name + ", ";
 		}
-		Debug.Log(interactables);
+		// Debug.Log(interactables);
 		
 		if (_currentInteractable != null)
 		{
