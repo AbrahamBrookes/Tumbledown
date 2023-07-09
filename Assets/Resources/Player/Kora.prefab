@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameplayCameraTransform: {fileID: 0}
-  _runSpeed: 5
+  _runSpeed: 7
   _acceleration: 75
 --- !u!114 &6173572880405182703
 MonoBehaviour:
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mesh: {fileID: 8776512405271151058}
-  moveSpeed: 6.5
+  moveSpeed: 8
   jumpForce: 5
   gravity: -9.8
 --- !u!95 &8434404659709192680
