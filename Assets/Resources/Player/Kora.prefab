@@ -1,51 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &387978112
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 387978114}
-  - component: {fileID: 387978113}
-  m_Layer: 0
-  m_Name: AttackCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &387978114
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 387978112}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2185315235911593226}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!136 &387978113
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 387978112}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.08
-  m_Height: 0.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!1 &6437659931318391475
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,6 +62,7 @@ GameObject:
   - component: {fileID: 1602478711}
   - component: {fileID: 1602478716}
   - component: {fileID: 4459197350568631464}
+  - component: {fileID: 2080338882}
   m_Layer: 0
   m_Name: Kora
   m_TagString: Player
@@ -144,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameplayCameraTransform: {fileID: 0}
-  _runSpeed: 3.8
+  _runSpeed: 5
   _acceleration: 75
 --- !u!114 &6173572880405182703
 MonoBehaviour:
@@ -212,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 663f860151a8c6e448b9b3fd88f5b952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackCollider: {fileID: 387978112}
+  _attackCollider: {fileID: 6437659931318391475}
   _animator: {fileID: 8434404659709192680}
   _protagonist: {fileID: 8434404659709192685}
 --- !u!114 &1602478711
@@ -260,6 +215,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collider: {fileID: 5207862169121197750}
+--- !u!114 &2080338882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8434404659709192684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ea1c54479cf7eb4d8dca8f1e7af770d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 0}
+  _distance: 4.5
+  _height: 7.5
+  _damping: 5
+  _lookDownAngle: 57
+  _camera: {fileID: 0}
 --- !u!1001 &8434404659660209283
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -330,12 +303,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 2e2f1518e501780458483b9f9df18f50, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2e2f1518e501780458483b9f9df18f50, type: 3}
---- !u!4 &2185315235911593226 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -1486527654978891383, guid: 2e2f1518e501780458483b9f9df18f50,
-    type: 3}
-  m_PrefabInstance: {fileID: 8434404659660209283}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8252775006745877352 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2e2f1518e501780458483b9f9df18f50,
