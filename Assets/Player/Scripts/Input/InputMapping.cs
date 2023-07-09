@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Tumbledown.Input {
 /**
  * During gameplay the player interacts with the world and the things in it. These interactions
  * may cause the input scheme to change - for instance, when the player is looting a chest they
@@ -20,59 +21,60 @@ using UnityEngine.InputSystem;
  * generated from that action mapping UI.
  */
 
-abstract public class InputMapping : GameInput.IGameplayActions
-{
-	// our game input
-	protected GameInput _gameInput;
-
-	// the current movement vector being input
-	protected Vector2 _movementVector;
-
-	// allow getting the movement vector
-	public Vector2 MovementVector { get { return _movementVector; } }
-
-	// we're always going to need a character controller
-	protected CharacterController _characterController;
-
-	// whenever we get input, update the movement vector
-	public virtual void OnMove(InputAction.CallbackContext context) {
-		// update our input vector
-		_movementVector = context.ReadValue<Vector2>();
-	}
-
-	public virtual void OnAttack(InputAction.CallbackContext context) { }
-	public virtual void OnInteract(InputAction.CallbackContext context) { }
-	public virtual void OnPause(InputAction.CallbackContext context) { }
-	public virtual void OnOpenInventory(InputAction.CallbackContext context) { }
-	public virtual void OnCrouch(InputAction.CallbackContext context) { }
-
-	// on construct, accept and cache our deps
-	public InputMapping(PlayerMovement movement, CharacterController characterController)
+	abstract public class InputMapping : GameInput.IGameplayActions
 	{
-		_characterController = characterController;
-	}
+		// our game input
+		protected GameInput _gameInput;
 
-	// on activation, register this mapping with the InputManager
-	public void ActivateMapping()
-	{
-		// if there is an existing mapping, deactivate it and remove it from input
-		if (_gameInput == null)
-		{
-			_gameInput = new GameInput();
+		// the current movement vector being input
+		protected Vector2 _movementVector;
+
+		// allow getting the movement vector
+		public Vector2 MovementVector { get { return _movementVector; } }
+
+		// we're always going to need a character controller
+		protected CharacterController _characterController;
+
+		// whenever we get input, update the movement vector
+		public virtual void OnMove(InputAction.CallbackContext context) {
+			// update our input vector
+			_movementVector = context.ReadValue<Vector2>();
 		}
-		else
+
+		public virtual void OnAttack(InputAction.CallbackContext context) { }
+		public virtual void OnInteract(InputAction.CallbackContext context) { }
+		public virtual void OnPause(InputAction.CallbackContext context) { }
+		public virtual void OnOpenInventory(InputAction.CallbackContext context) { }
+		public virtual void OnCrouch(InputAction.CallbackContext context) { }
+
+		// on construct, accept and cache our deps
+		public InputMapping(PlayerMovement movement, CharacterController characterController)
+		{
+			_characterController = characterController;
+		}
+
+		// on activation, register this mapping with the InputManager
+		public void ActivateMapping()
+		{
+			// if there is an existing mapping, deactivate it and remove it from input
+			if (_gameInput == null)
+			{
+				_gameInput = new GameInput();
+			}
+			else
+			{
+				_gameInput.Gameplay.Disable();
+				_gameInput.Gameplay.SetCallbacks(null);
+			}
+
+			_gameInput.Gameplay.SetCallbacks(this);
+			_gameInput.Gameplay.Enable();
+		}
+
+		public void DeactivateMapping()
 		{
 			_gameInput.Gameplay.Disable();
 			_gameInput.Gameplay.SetCallbacks(null);
 		}
-
-		_gameInput.Gameplay.SetCallbacks(this);
-		_gameInput.Gameplay.Enable();
-	}
-
-	public void DeactivateMapping()
-	{
-		_gameInput.Gameplay.Disable();
-		_gameInput.Gameplay.SetCallbacks(null);
 	}
 }
