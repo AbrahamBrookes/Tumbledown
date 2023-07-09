@@ -1,59 +1,90 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using Tumbledown.Input;
 
-public class Attacker : MonoBehaviour
-{
-	// the attack collider is a collider that overlaps the weapon mesh
-	[SerializeField] private GameObject _attackCollider;
+namespace Tumbledown.Abilities {
 
-	// we need a reference to the animator so we can make animation calls
-	[SerializeField] private Animator _animator;
+	/**
+	* Our attacker script relies on the interactor collider - when a gameobject containing a 
+	* component that implementes the iSlashable interface enters the collider, we add it to
+	* a list of slashable objects. When the player attacks, we iterate through the list and
+	* call the slash method on each slashable object, passing in the direction of the attack.
+	*/
 
-	// a reference to the protagonist script, so we can disable movement while attacking
-	[SerializeField] private Protagonist _protagonist;
-
-	// on start, cache deps
-	private void Start()
+	public class Attacker : MonoBehaviour
 	{
-		_animator = GetComponent<Animator>();
-		_protagonist = GetComponent<Protagonist>();
-	}
+		// the attack collider is the same as the interaction cube
+		[SerializeField] private GameObject _attackCollider;
 
-	public void EnableWeapon()
-	{
-		_attackCollider.SetActive(true);
-	}
+		// we need a reference to the animator so we can make animation calls
+		[SerializeField] private Animator _animator;
 
-	public void DisableWeapon()
-	{
-		_attackCollider.SetActive(false);
-	}
+		// a reference to the protagonist script, so we can disable movement while attacking
+		[SerializeField] private Protagonist _protagonist;
 
-	public void Attack()
-	{
+		// our list of slashables
+		private List<iSlashable> _slashableObjects = new List<iSlashable>();
 
-		// toggle on the attack collider
-		EnableWeapon();
+		// on start, cache deps
+		private void Start()
+		{
+			_animator = GetComponent<Animator>();
+			_protagonist = GetComponent<Protagonist>();
 
-		// disable input while attacking
-		_protagonist.SetInputMapping(typeof(CurrentlyAttackingInputMapping));
+			// if we don't have an attack collider already set, log an error
+			if (_attackCollider == null)
+			{
+				Debug.LogError("No attack collider set on " + gameObject.name);
+			}
+		}
 
-		// play the attack animation
-		_animator.SetBool("IsAttacking", true);
-		_animator.Play("Attack", 0, 0f);
+		/**
+		* Whenever a gameobject with a component that implements the iSlashable interface
+		* enters the attack collider, we add it to a list of slashable objects.
+		*/
+		private void OnTriggerEnter(Collider other)
+		{
+			// if the other gameobject has a component that implements the iSlashable interface
+			if (other.GetComponent(typeof(iSlashable)) != null)
+			{
+				// add it to the list of slashable objects
+				_slashableObjects.Add((iSlashable)other.GetComponent(typeof(iSlashable)));
+			}
+		}
 
-		// after a frame, flick the trigger off
-		Invoke("DisableWeapon", 0.01f);
-	}
+		// when the player presses the attack button, start the animation
+		public void StartAttack()
+		{
+			// disable input while attacking
+			_protagonist.SetInputMapping(typeof(CurrentlyAttackingInputMapping));
 
-	// called from an animation event, or when attacking is interrupted
-	public void FinishAttacking()
-	{
-		// toggle off the attack collider
-		DisableWeapon();
+			// play the attack animation
+			_animator.SetBool("IsAttacking", true);
+			_animator.Play("Attack", 0, 0f);
+		}
 
-		// flick back to the general gameplay input mapping
-		_protagonist.SetInputMapping(typeof(GeneralGameplayInputMapping));
+		// called from an animation event - actually apply damage to the slashable objects
+		public void ApplyDamage()
+		{
+			// if we have slashable objects in our list
+			if (_slashableObjects.Count > 0)
+			{
+				// iterate through the list
+				foreach (iSlashable slashableObject in _slashableObjects)
+				{
+					// call the slash method on each slashable object, passing in the direction of the attack
+					slashableObject.BeSlashed(this);
+				}
+			}
+		}
 
-		_animator.SetBool("IsAttacking", false);
+		// called from an animation event, or when attacking is interrupted
+		public void FinishAttacking()
+		{
+			// flick back to the general gameplay input mapping
+			_protagonist.SetInputMapping(typeof(GeneralGameplayInputMapping));
+
+			_animator.SetBool("IsAttacking", false);
+		}
 	}
 }
