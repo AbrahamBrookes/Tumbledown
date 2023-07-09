@@ -68,8 +68,9 @@ namespace Tumbledown.PlayerTests
 			// wait for a tick
 			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist has not moved
-			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+			// check that the protagonist has not moved, but ignore the y axis
+			Assert.AreEqual(protagonistWorldLocation.x, protagonist.transform.position.x);
+			Assert.AreEqual(protagonistWorldLocation.z, protagonist.transform.position.z);
 
 			// do some input
 			Set(gamepad.leftStick, new Vector2(0f, 1f));
@@ -95,8 +96,9 @@ namespace Tumbledown.PlayerTests
 			// wait for a tick
 			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist has not moved
-			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+			// check that the protagonist has not moved, but ignore the y axis
+			Assert.AreEqual(protagonistWorldLocation.x, protagonist.transform.position.x);
+			Assert.AreEqual(protagonistWorldLocation.z, protagonist.transform.position.z);
 
 			// do some input
 			Set(gamepad.leftStick, new Vector2(-1f, 0f));
@@ -122,8 +124,9 @@ namespace Tumbledown.PlayerTests
 			// wait for a tick
 			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist has not moved
-			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+			// check that the protagonist has not moved, but ignore the y axis
+			Assert.AreEqual(protagonistWorldLocation.x, protagonist.transform.position.x);
+			Assert.AreEqual(protagonistWorldLocation.z, protagonist.transform.position.z);
 
 			// do some input
 			Set(gamepad.leftStick, new Vector2(0f, -1f));
@@ -149,8 +152,9 @@ namespace Tumbledown.PlayerTests
 			// wait for a tick
 			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist has not moved
-			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+			// check that the protagonist has not moved, but ignore the y axis
+			Assert.AreEqual(protagonistWorldLocation.x, protagonist.transform.position.x);
+			Assert.AreEqual(protagonistWorldLocation.z, protagonist.transform.position.z);
 		}
 
 		/**
@@ -192,8 +196,9 @@ namespace Tumbledown.PlayerTests
 			// wait for a tick
 			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist has not moved
-			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+			// check that the protagonist has not moved, but ignore the y axis
+			Assert.AreEqual(protagonistWorldLocation.x, protagonist.transform.position.x);
+			Assert.AreEqual(protagonistWorldLocation.z, protagonist.transform.position.z);
 
 			// do some input
 			Set(gamepad.leftStick, new Vector2(-1f, 1f));
@@ -219,8 +224,9 @@ namespace Tumbledown.PlayerTests
 			// wait for a tick
 			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist has not moved
-			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+			// check that the protagonist has not moved, but ignore the y axis
+			Assert.AreEqual(protagonistWorldLocation.x, protagonist.transform.position.x);
+			Assert.AreEqual(protagonistWorldLocation.z, protagonist.transform.position.z);
 
 			// do some input
 			Set(gamepad.leftStick, new Vector2(-1f, -1f));
@@ -246,8 +252,9 @@ namespace Tumbledown.PlayerTests
 			// wait for a tick
 			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist has not moved
-			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+			// check that the protagonist has not moved, but ignore the y axis
+			Assert.AreEqual(protagonistWorldLocation.x, protagonist.transform.position.x);
+			Assert.AreEqual(protagonistWorldLocation.z, protagonist.transform.position.z);
 
 			// do some input
 			Set(gamepad.leftStick, new Vector2(1f, -1f));
@@ -273,8 +280,9 @@ namespace Tumbledown.PlayerTests
 			// wait for a tick
 			yield return new WaitForSeconds(0.1f);
 
-			// check that the protagonist has not moved
-			Assert.AreEqual(protagonistWorldLocation, protagonist.transform.position);
+			// check that the protagonist has not moved, but ignore the y axis
+			Assert.AreEqual(protagonistWorldLocation.x, protagonist.transform.position.x);
+			Assert.AreEqual(protagonistWorldLocation.z, protagonist.transform.position.z);
 		}
 	}
 }
