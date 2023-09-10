@@ -65,5 +65,11 @@ namespace Tumbledown.Player {
 		{
 			GetComponent<PlayerMovement>().SetInputMapping(inputMapping);
 		}
+
+		// proxy ReturnToPreviousInputMapping to our PlayerMovement component
+		public void ReturnToPreviousInputMapping()
+		{
+			GetComponent<PlayerMovement>().ReturnToPreviousInputMapping();
+		}
 	}
 }

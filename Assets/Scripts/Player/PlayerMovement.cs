@@ -18,6 +18,8 @@ namespace Tumbledown {
 		
 		// the input mapping is swapped out when we need to activate different controls
 		[SerializeField] private InputMapping _inputMapping = default;
+		// recall our previous input mapping so we can switch back to it
+		private InputMapping _previousInputMapping = default;
 
 		public float moveSpeed = 5f;
 		public float jumpForce = 5f;
@@ -147,12 +149,21 @@ namespace Tumbledown {
 		// allow other scripts to set the inputMapping
 		public void SetInputMapping(Type inputMapping)
 		{
-			// disable the old input mapping if we have one
+			// disable and stash the old input mapping if we have one
 			if (_inputMapping != null)
+			{
 				_inputMapping.DeactivateMapping();
+				_previousInputMapping = _inputMapping;
+			}
 
 			_inputMapping = (InputMapping)Activator.CreateInstance(inputMapping, this, _characterController,this.GetComponent<Protagonist>());
 			_inputMapping.ActivateMapping();
+		}
+
+		// return to the previous input mapping
+		public void ReturnToPreviousInputMapping()
+		{
+			SetInputMapping(_previousInputMapping.GetType());
 		}
 	}
 }
