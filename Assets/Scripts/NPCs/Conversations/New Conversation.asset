@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: New Conversation
   m_EditorClassIdentifier: 
   _lines:
-  - text: FUKKA YOU!
-  - text: NO! FUKKA YOU!
-  - text: ok, fukka me
+  - text: Hey there, kid! Did you know you have a sword and stuff?
+  - text: You can use it to slash that grass down there. Give it a go!

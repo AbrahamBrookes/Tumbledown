@@ -8,6 +8,8 @@ public class DialogueManager : MonoBehaviour
 	private Label dialogueText;
 	private Conversation _currentConversation;
 	private int _currentLineIndex;
+	
+    [SerializeField] private float _fontRatio = 10;
 
 	// public getter to allow other scripts to query whether we're in a conversation
 	public static bool InConversation => Instance._currentConversation != null;
@@ -31,6 +33,20 @@ public class DialogueManager : MonoBehaviour
 		// hide the conversation UI
 		ToggleConversationUI(false);
 	}
+
+	void OnGUI()
+	{
+		// dynamically scale the font to match the screen size
+        float finalSize = (float)Screen.width/_fontRatio;
+        dialogueText.style.fontSize = (int)finalSize;
+		StyleLength pixelOffsetX = new StyleLength(Screen.width/_fontRatio);
+		StyleLength pixelOffsetY = new StyleLength(Screen.height/_fontRatio);
+        dialogueText.style.left = pixelOffsetX;
+        dialogueText.style.right = pixelOffsetX;
+        dialogueText.style.top = pixelOffsetY;
+        dialogueText.style.bottom = pixelOffsetY;
+
+    }
 
 	public static void StartConversation(Conversation conversation)
 	{
