@@ -1,0 +1,59 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using Tumbledown.Abilities;
+using Tumbledown.Player;
+
+namespace Tumbledown.Input {
+	/**
+	* This is the most common input mapping - walk around and hit stuff with your sword.
+	*/
+
+	public class GeneralGameplayInputMapping : InputMapping
+	{
+		// a reference to the protagonists attack script
+		Attacker _attacker;
+
+		// a reference to the protagonists CrouchAndCrawl script
+		CrouchAndCrawl _crouchAndCrawl;
+
+		// a reference to the protagonists Interactor script
+		Interactor _interactor;
+
+		// a reference to the protagonist itself
+		Protagonist protagonist;
+
+		// in the contructor pass the protagonist and the character controller directly to base
+		public GeneralGameplayInputMapping(PlayerMovement movement, CharacterController characterController, Protagonist protagonist) : base(movement, characterController, protagonist) {
+			// on construct, cache deps
+			_attacker = movement.GetComponentInChildren<Attacker>();
+			_crouchAndCrawl = movement.GetComponent<CrouchAndCrawl>();
+			_interactor = protagonist.GetComponentInChildren<Interactor>();
+		}
+
+		public override void OnAttack(InputAction.CallbackContext context) {
+			// if the button has been pressed
+			if (context.performed) {
+				_attacker.StartAttack();
+			}
+		}
+
+		public override void OnInteract(InputAction.CallbackContext context) {
+			// if the button has been pressed
+			if (context.performed) {
+				_interactor.Interact();
+			}
+		}
+
+		public override void OnPause(InputAction.CallbackContext context) { }
+		public override void OnOpenInventory(InputAction.CallbackContext context) { }
+		
+		public override void OnCrouch(InputAction.CallbackContext context) {
+			// if the button has been pressed, crouch
+			if (context.performed) _crouchAndCrawl.Crouch();
+			// if the button has been released, stand up
+			if (context.canceled) _crouchAndCrawl.StandUp();
+		}
+	}
+}

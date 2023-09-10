@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
-        <ui:VisualElement style="position: absolute; bottom: 40px; right: 40px; top: 60%; left: 40px; border-top-left-radius: 40px; border-bottom-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; background-color: rgba(20, 15, 33, 0.26);">
-            <ui:Label text="Label" display-tooltip-when-elided="true" style="position: absolute; left: 80px; top: 80px; right: 80px; bottom: 80px; -unity-text-align: upper-left; -unity-font: resource(&apos;&apos;); font-size: 30px; -unity-text-outline-width: 0; -unity-text-outline-color: rgba(0, 0, 0, 255); text-shadow: 1px 4px 4px rgba(0, 0, 0, 0.19); color: rgba(255, 255, 255, 255); align-items: flex-start; justify-content: center; display: flex; visibility: visible;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
-</ui:UXML>
